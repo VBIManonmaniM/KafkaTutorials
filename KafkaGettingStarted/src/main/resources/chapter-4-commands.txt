@@ -1,0 +1,45 @@
+
+#Create a Topic with multiple partitions
+
+        ./kafka-topics.sh \
+            --bootstrap-server localhost:9092 \
+            --create \
+            --topic kafka.learning.orders \
+            --partitions 3 \
+            --replication-factor 1
+
+
+#Check topic partitioning
+
+        ./kafka-topics.sh \
+            --bootstrap-server localhost:9092 \
+            --topic kafka.usecases.students \
+            --describe
+
+## Publishing Messages to Topics with keys
+
+        ./kafka-console-producer.sh \
+            --bootstrap-server localhost:29092 \
+            --property "parse.key=true" \
+            --property "key.separator=:" \
+            --topic  kafka.usecases.students
+
+## Consume messages using a consumer group
+
+        ## copy and paste the below script multiple times to create more consumer inside the consumer group (test-consumer-group)
+
+        ./kafka-console-consumer.sh \
+            --bootstrap-server localhost:29092 \
+            --topic kafka.usecases.students \
+            --group students-consumer-group \
+            --property print.key=true \
+            --property key.separator=" = " \
+            --from-beginning
+
+## Check current status of offsets
+
+        ./kafka-consumer-groups.sh \
+            --bootstrap-server localhost:29092 \
+            --describe \
+            --all-groups
+
